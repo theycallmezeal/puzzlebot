@@ -4,7 +4,7 @@ from puzzles import views as puzzle_views
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path('accounts/signup', puzzle_views.signup),
+	path('accounts/signup', puzzle_views.signup, name="signup"),
 	path('accounts/', include('django.contrib.auth.urls')),
 	path('', include('puzzles.urls'))
 ]
