@@ -41,13 +41,14 @@ def index(request):
 	# creates a dictionary where the key is the tier's number
 	# and the value is the tier itself, plus some per-user information
 	# about that tier. necessary to store the tiers by their number
-	# in order to be able to look up tiers by number in the section below.
+	# in order to be able to look up tiers by number in the sections below.
 	tier_info = {}
-	tiers = Tier.objects.all().order_by()
+	tiers = Tier.objects.all()
 	for tier in tiers:
 		tier_info[str(tier.number)] = {
 			'tier': tier,
-			'user_solved_num': len(SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__tier__number=tier.number))
+			'user_solved_num': len(SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__tier__number=tier.number)),
+			'puzzles': []
 		}
 	
 	# determine whether tiers are locked or unlocked by looking at the tier below.
@@ -65,7 +66,13 @@ def index(request):
 			if puzzles_solved >= puzzles_required:
 				locked = False
 		tier_info[tier_num]['locked'] = locked
-		
+	
+	# grab all puzzles and add them into the tier_info dictionary.
+	for puzzle in Puzzle.objects.all().order_by('number'):
+		puzzle_num = str(puzzle.tier.number)
+		puzzle_list = tier_info[puzzle_num]['puzzles']
+		puzzle_list.append(puzzle)
+	
 	if request.user.is_authenticated:
 		return render(request, 'puzzles/index.html', {
 			'tier_info': tier_info.values() # don't need the key numbers any more
