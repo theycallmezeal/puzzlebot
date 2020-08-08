@@ -19,6 +19,8 @@ def puzzle(request, puzzle_num):
 		check if the puzzle can be viewed based on the user's highest_solved_tier
 		display an error page if not
 		404 if the puzzle num is not found
+		if the puzzle number is good...
+			grab the html insert from the static files
 	"""
 	return HttpResponse("you're viewing puzzle " + str(puzzle_num))
 	
