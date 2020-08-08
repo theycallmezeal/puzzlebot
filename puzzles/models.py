@@ -6,7 +6,7 @@ class Tier(models.Model):
 	num_to_unlock = models.PositiveSmallIntegerField()
 
 class Puzzle(models.Model):
-	name = models.SlugField(unique=True)
+	number = models.PositiveSmallIntegerField(unique=True)
 	tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
 	answer = models.CharField(max_length=100)
 

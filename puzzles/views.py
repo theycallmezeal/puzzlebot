@@ -14,17 +14,17 @@ def index(request):
 	"""
 	return HttpResponse("helo")
 
-def puzzle(request, puzzle_slug):
+def puzzle(request, puzzle_num):
 	"""
 		check if the puzzle can be viewed based on the user's highest_solved_tier
 		display an error page if not
-		404 if the puzzle slug is not found
+		404 if the puzzle num is not found
 	"""
-	return HttpResponse("you're viewing puzzle " + puzzle_slug)
+	return HttpResponse("you're viewing puzzle " + str(puzzle_num))
 	
 """
 def solve(request):
-	get puzzle slug from request
+	get puzzle num from request
 	compare correct answer (stored in db) to user's answer
 	if it's correct and if this puzzle hasn't already been solved before:
 		create a solvedpuzzle entry
