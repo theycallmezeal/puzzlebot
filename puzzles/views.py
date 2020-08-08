@@ -18,6 +18,10 @@ def index(request):
 				display the puzzle
 			<hr>
 	"""
+	return render(request, 'puzzles/index.html', {
+	
+	})
+	
 	if request.user.is_authenticated:
 		return HttpResponse("logged in as " + request.user.username)
 	else:
