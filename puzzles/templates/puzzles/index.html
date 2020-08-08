@@ -1,1 +1,8 @@
 <h1>Puzzlebot</h1>
+
+{% if request.user.is_authenticated %}
+	<p>Logged in as {{ request.user.username }}</p>
+	<p><a href="{% url 'logout'%}">Log out</a></p>
+{% else %}
+	<p><a href="{% url 'login'%}">Log in</a></p>
+{% endif %}

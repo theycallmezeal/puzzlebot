@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+def signup(request):
+	return HttpResponse("signup page!")
+
 def index(request):
 	"""
 	if you're not logged in
@@ -18,14 +21,10 @@ def index(request):
 				display the puzzle
 			<hr>
 	"""
+	
 	return render(request, 'puzzles/index.html', {
-	
+		
 	})
-	
-	if request.user.is_authenticated:
-		return HttpResponse("logged in as " + request.user.username)
-	else:
-		return HttpResponse("not logged in")
 
 def puzzle(request, puzzle_num):
 	"""
