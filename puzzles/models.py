@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Tier(models.Model):
-	number = models.PositiveSmallIntegerField()
+	number = models.PositiveSmallIntegerField(unique=True)
 	num_to_unlock = models.PositiveSmallIntegerField()
 
 class Puzzle(models.Model):
-	name = models.SlugField()
+	name = models.SlugField(unique=True)
 	tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
 	answer = models.CharField(max_length=100)
 
