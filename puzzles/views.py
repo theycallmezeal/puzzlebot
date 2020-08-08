@@ -28,7 +28,7 @@ def puzzle(request, puzzle_num):
 def solve(request):
 	get puzzle num from request
 	compare correct answer (stored in db) to user's answer
-	if it's correct and if this puzzle hasn't already been solved before:
+	if it's correct: (no need to worry about duplicate entries since unique_together is set in SolvedPuzzle)
 		create a solvedpuzzle entry
 		after saving the solvedpuzzle, if the number of solvedpuzzles at the current tier >= the tier's num_to_unlock:
 			update the user's highest_solved_tier
