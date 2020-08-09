@@ -75,6 +75,23 @@ input {
 	font-size: 80%;
 }
 
+.solved {
+	background-color: #7dd4b7;
+	color: #e8fff7;
+	box-shadow: #2b8c6b 2px 2px 2px;
+	text-shadow: #2b8c6b;
+	position: relative;
+}
+
+.solved::after  {
+	content: "✔️";
+	display: block;
+	position: absolute;
+	top: -20px;
+	right: -20px;
+	font-size: 80%;
+}
+
 #feedback {
 	background-color: #eeeeee;
 	box-shadow: #aaaaaa 2px 2px 2px;
