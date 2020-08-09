@@ -7,6 +7,10 @@
 {% if request.user.is_authenticated %}
 	<p><strong>{{ request.user.username }}</strong> | <a href="{% url 'logout'%}">Log out</a></p>
 	
+	{% if num_solved_puzzles > 0 %}
+		<p>You've solved {{ num_solved_puzzles }} puzzles! Keep going!</p>
+	{% endif %}
+	
 	{% for tier_entry in tier_info %}
 		{% if tier_entry.locked %}
 			<div class="tier-heading">

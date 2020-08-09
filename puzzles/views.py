@@ -71,7 +71,8 @@ def index(request):
 		})
 	
 	return render(request, 'puzzles/index.html', {
-		'tier_info': tier_info.values() # don't need the key numbers any more
+		'tier_info': tier_info.values(), # don't need the key numbers any more
+		'num_solved_puzzles': SolvedPuzzle.objects.filter(user_id=request.user.id).count()
 	})
 		
 
