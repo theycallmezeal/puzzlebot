@@ -15,6 +15,7 @@
 		{% if tier_entry.locked %}
 			<div class="tier-heading">
 				<h1>Tier {{ tier_entry.tier.number }}</h1>
+				<p class="num-to-proceed">Solve <span class="number">{{ tier_entry.tier.num_to_unlock }}</span> to proceed</p>
 			</div>
 			<div class="puzzle-list">
 				{% for puzzle_entry in tier_entry.puzzles %}
