@@ -1,1 +1,8 @@
-<h1>Puzzle</h1>
+<h1>Puzzle {{ puzzle_num }}</h1>
+{% if already_solved %}
+	<p>You've already solved this puzzle,</p>
+{% endif %}
+
+{% include puzzle_file %}
+
+<p><a href="{% url 'index' %}">Back</a></p>

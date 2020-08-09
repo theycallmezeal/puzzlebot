@@ -4,7 +4,6 @@
 	<p>{{ request.user.username }} | <a href="{% url 'logout'%}">Log out</a></p>
 	
 	{% for tier_entry in tier_info %}
-		
 		{% if tier_entry.locked %}
 			<h1>Tier {{ tier_entry.tier.number }} - Locked</h1>
 			<p>Solve {{ tier_entry.tier.num_to_unlock }} to proceed</p>

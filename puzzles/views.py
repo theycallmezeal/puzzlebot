@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from django.contrib.auth import login, authenticate
@@ -75,20 +75,35 @@ def index(request):
 		
 
 def puzzle(request, puzzle_num):
-	"""
-		check if the puzzle can be viewed or not based on the tier below
-			if the tier below doesn't exist, this puzzle can be viewed
-			if the tier below doesn't have enough puzzles solved, this puzzle cannot be viewed
-			if the tier below does have enough puzzles solved, this puzzle can be viewed
-		404 if the puzzle num is not found
-		if the puzzle number is good...
-			grab the html insert from the static files
-		maybe: see if a SolvedPuzzle already exists?
-	"""
 	if not request.user.is_authenticated:
 		return render(request, 'puzzles/puzzle_not_logged_in.html', {})
+	
+	try:
+		puzzle = Puzzle.objects.get(number=puzzle_num)
+	except Puzzle.DoesNotExist:
+		return render(request, 'puzzles/puzzle_does_not_exist.html', {})
 		
-	return render(request, 'puzzles/puzzle.html', {})
+	is_viewable = False
+	tier_below_num = puzzle.tier.number - 1
+	try:
+		tier_below = Tier.objects.get(number=tier_below_num)
+		num_solved_at_tier_below = SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__tier__number=tier_below_num).count()
+		num_needed_to_progress = tier_below.num_to_unlock
+		
+		is_viewable = num_solved_at_tier_below >= num_needed_to_progress
+	except Tier.DoesNotExist:
+		is_viewable = True
+	
+	if is_viewable:
+		return render(request, 'puzzles/puzzle.html', {
+			'puzzle_num': puzzle_num,
+			'already_solved': SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__number=puzzle_num).exists(),
+			'puzzle_file': 'puzzle_files/' + str(puzzle_num) + '.html'
+		})
+	else:
+		return render(request, 'puzzles/puzzle_not_unlocked.html', {
+			'puzzle_num': puzzle_num
+		})
 	
 """
 def solve(request):
