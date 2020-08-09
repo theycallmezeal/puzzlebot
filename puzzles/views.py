@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.db import IntegrityError
 
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -114,6 +115,12 @@ def solve(request, puzzle_num):
 	answer = Puzzle.objects.get(number=puzzle_num).answer;
 	guess = request.POST['guess']
 	if answer == guess:
+		puzzle_instance = Puzzle.objects.get(number=puzzle_num)
+		solved_puzzle = SolvedPuzzle(user=request.user, puzzle=puzzle_instance)
+		try:
+			solved_puzzle.save()
+		except IntegrityError:
+			pass
 		return puzzle(request, puzzle_num, True)
 	else:
 		return puzzle(request, puzzle_num, False)
