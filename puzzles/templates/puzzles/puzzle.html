@@ -1,8 +1,8 @@
 <h1>Puzzle {{ puzzle_num }}</h1>
 <p><a href="{% url 'index' %}">Back</a></p>
 
-{% if status_message %}
-	<p>{{ status_message }}</p>
+{% if feedback %}
+	<p>{{ feedback }}</p>
 {% endif %}
 
 {% include puzzle_file %}

@@ -74,7 +74,7 @@ def index(request):
 	})
 		
 
-def puzzle(request, puzzle_num):
+def puzzle(request, puzzle_num, is_solved=None):
 	if not request.user.is_authenticated:
 		return render(request, 'puzzles/puzzle_not_logged_in.html', {})
 	
@@ -95,10 +95,15 @@ def puzzle(request, puzzle_num):
 		is_viewable = True
 	
 	if is_viewable:
+		feedback = {
+			None: 'You\'ve already solved this puzzle' if SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__number=puzzle_num).exists() else '',
+			True: 'Correct!',
+			False: 'Sorry, try again.'
+		}
 		return render(request, 'puzzles/puzzle.html', {
 			'puzzle_num': puzzle_num,
-			'already_solved': SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__number=puzzle_num).exists(),
-			'puzzle_file': 'puzzle_files/' + str(puzzle_num) + '.html'
+			'puzzle_file': 'puzzle_files/' + str(puzzle_num) + '.html',
+			'feedback': feedback[is_solved]
 		})
 	else:
 		return render(request, 'puzzles/puzzle_not_unlocked.html', {
@@ -108,9 +113,10 @@ def puzzle(request, puzzle_num):
 def solve(request, puzzle_num):
 	answer = Puzzle.objects.get(number=puzzle_num).answer;
 	guess = request.POST['guess']
-	print(answer)
-	print(guess)
-	return redirect('puzzle', puzzle_num);
+	if answer == guess:
+		return puzzle(request, puzzle_num, True)
+	else:
+		return puzzle(request, puzzle_num, False)
 """
 	get puzzle num from request
 	compare correct answer (stored in db) to user's answer
