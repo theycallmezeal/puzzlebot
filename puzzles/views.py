@@ -21,23 +21,6 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 def index(request):
-	"""
-	if you're not logged in
-		display login page
-	if you are logged in
-		for each tier:
-			var lowest_locked_tier = some huge number
-			look for the tier below
-			if the tier below doesn't exist, this tier is unlocked
-			if this tier number > lowest_locked_tier, then it's locked
-			if the tier below has enough solved, this tier is unlocked
-			else this tier is locked; if this tier number < lowest_locked_tier, then lowest_locked_tier = this tier number
-			for each puzzle in said tier:
-				if the tier is unlocked, determine whether this user has solved it
-				display the puzzle
-			<hr>
-	"""
-	
 	# creates a dictionary where the key is the tier's number
 	# and the value is the tier itself, plus some per-user information
 	# about that tier. necessary to store the tiers by their number
@@ -47,7 +30,7 @@ def index(request):
 	for tier in tiers:
 		tier_info[str(tier.number)] = {
 			'tier': tier,
-			'user_solved_num': len(SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__tier__number=tier.number)),
+			'user_solved_num': SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__tier__number=tier.number).count(),
 			'puzzles': []
 		}
 	
@@ -67,11 +50,21 @@ def index(request):
 				locked = False
 		tier_info[tier_num]['locked'] = locked
 	
-	# grab all puzzles and add them into the tier_info dictionary.
+	# create a list of all the puzzle numbers that this user has solved.
+	solved_puzzles = []
+	for solved_puzzle in SolvedPuzzle.objects.filter(user_id=request.user.id):
+		solved_puzzles.append(solved_puzzle.puzzle.number)
+	
+	# grab all puzzles.
+	# create dictionaries of puzzle number and whether or not it's solved, unsolved, or locked
+	# and add these dictionaries to the tier_info.
 	for puzzle in Puzzle.objects.all().order_by('number'):
 		puzzle_num = str(puzzle.tier.number)
 		puzzle_list = tier_info[puzzle_num]['puzzles']
-		puzzle_list.append(puzzle)
+		puzzle_list.append({
+			'puzzle_num': puzzle.number,
+			'solved': 'Solved' if (puzzle.number in solved_puzzles) else 'Unsolved'
+		})
 	
 	if request.user.is_authenticated:
 		return render(request, 'puzzles/index.html', {
