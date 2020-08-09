@@ -2,4 +2,4 @@ db.sqlite3
 *.pyc
 __pycache__/
 migrations/
-puzzle_files/*
+puzzle_files/
