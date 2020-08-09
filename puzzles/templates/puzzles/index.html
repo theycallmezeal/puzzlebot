@@ -7,7 +7,9 @@
 {% if request.user.is_authenticated %}
 	<p><strong>{{ request.user.username }}</strong> | <a href="{% url 'logout'%}">Log out</a></p>
 	
-	{% if num_solved_puzzles > 0 %}
+	{% if num_solved_puzzles == 1 %}
+		<p>You've solved your first puzzle! Keep going!</p>
+	{% elif num_solved_puzzles > 0 %}
 		<p>You've solved {{ num_solved_puzzles }} puzzles! Keep going!</p>
 	{% endif %}
 	
