@@ -1,8 +1,14 @@
 <h1>Puzzle {{ puzzle_num }}</h1>
-{% if already_solved %}
-	<p>You've already solved this puzzle,</p>
+<p><a href="{% url 'index' %}">Back</a></p>
+
+{% if status_message %}
+	<p>{{ status_message }}</p>
 {% endif %}
 
 {% include puzzle_file %}
 
-<p><a href="{% url 'index' %}">Back</a></p>
+<form action="{% url 'solve' puzzle_num %}" method="post">
+	{% csrf_token %}
+	<input type="text" name="guess">
+	<input type="submit" value="Submit">
+</form>

@@ -105,8 +105,13 @@ def puzzle(request, puzzle_num):
 			'puzzle_num': puzzle_num
 		})
 	
+def solve(request, puzzle_num):
+	answer = Puzzle.objects.get(number=puzzle_num).answer;
+	guess = request.POST['guess']
+	print(answer)
+	print(guess)
+	return redirect('puzzle', puzzle_num);
 """
-def solve(request):
 	get puzzle num from request
 	compare correct answer (stored in db) to user's answer
 	if it's correct: (no need to worry about duplicate entries since unique_together is set in SolvedPuzzle)
