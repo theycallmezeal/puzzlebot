@@ -5,22 +5,35 @@
 <h1>Puzzlebot</h1>
 
 {% if request.user.is_authenticated %}
-	<p>{{ request.user.username }} | <a href="{% url 'logout'%}">Log out</a></p>
+	<p><strong>{{ request.user.username }}</strong> | <a href="{% url 'logout'%}">Log out</a></p>
 	
 	{% for tier_entry in tier_info %}
 		{% if tier_entry.locked %}
-			<h1>Tier {{ tier_entry.tier.number }} - Locked</h1>
-			<p>Solve {{ tier_entry.tier.num_to_unlock }} to proceed</p>
-			{% for puzzle_entry in tier_entry.puzzles %}
-				<p>{{ puzzle_entry.puzzle_num }}</a></p>
-			{% endfor %}
+			<div class="tier-heading">
+				<h1>Tier {{ tier_entry.tier.number }} 🔒</h1>
+				<p class="num-to-proceed">Solve <span class="number">{{ tier_entry.tier.num_to_unlock }}</span> to proceed</p>
+			</div>
+			<div class="puzzle-list">
+				{% for puzzle_entry in tier_entry.puzzles %}
+					<p class="puzzle locked">{{ puzzle_entry.puzzle_num }}</p>
+				{% endfor %}
+			</div>
 		{% else %}
-			<h1>Tier {{ tier_entry.tier.number }} - Unlocked</h1>
-			<p>Solve {{ tier_entry.tier.num_to_unlock }} to proceed</p>
-			{% for puzzle_entry in tier_entry.puzzles %}
-				<p><a href="{% url 'puzzle' puzzle_entry.puzzle_num %}">{{ puzzle_entry.puzzle_num }}</a> - {{ puzzle_entry.solved }}</p>
-			{% endfor %}
+			<div class="tier-heading">
+				<h1>Tier {{ tier_entry.tier.number }}</h1>
+				<p class="num-to-proceed">Solve <span class="number">{{ tier_entry.tier.num_to_unlock }}</span> to proceed</p>
+			</div>
+			<div class="puzzle-list">
+				{% for puzzle_entry in tier_entry.puzzles %}
+					{% if puzzle_entry.solved %}
+						<p class="puzzle solved"><a href="{% url 'puzzle' puzzle_entry.puzzle_num %}">{{ puzzle_entry.puzzle_num }}</a></p>
+					{% else %}
+						<p class="puzzle"><a href="{% url 'puzzle' puzzle_entry.puzzle_num %}">{{ puzzle_entry.puzzle_num }}</a></p>
+					{% endif %}
+				{% endfor %}
+			</div>
 		{% endif %}
+		<hr>
 	{% endfor %}
 {% else %}
 	<p><a href="{% url 'login'%}">Log in</a> <a href="{% url 'signup' %}">Sign up</a></p>

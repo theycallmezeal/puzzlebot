@@ -67,7 +67,7 @@ def index(request):
 		puzzle_list = tier_info[puzzle_num]['puzzles']
 		puzzle_list.append({
 			'puzzle_num': puzzle.number,
-			'solved': 'Solved' if (puzzle.number in solved_puzzles) else 'Unsolved'
+			'solved': puzzle.number in solved_puzzles
 		})
 	
 	return render(request, 'puzzles/index.html', {
@@ -97,7 +97,7 @@ def puzzle(request, puzzle_num, is_solved=None):
 	
 	if is_viewable:
 		feedback = {
-			None: 'You\'ve already solved this puzzle' if SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__number=puzzle_num).exists() else '',
+			None: 'You\'ve already solved this puzzle.' if SolvedPuzzle.objects.filter(user_id=request.user.id, puzzle__number=puzzle_num).exists() else '',
 			True: 'Correct!',
 			False: 'Sorry, try again.'
 		}

@@ -6,7 +6,7 @@
 <p><a href="{% url 'index' %}">Back</a></p>
 
 {% if feedback %}
-	<p>{{ feedback }}</p>
+	<p id="feedback">{{ feedback }}</p>
 {% endif %}
 
 {% include puzzle_file %}
