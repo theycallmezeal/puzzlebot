@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>Puzzle {{ puzzle_num }}</h1>
 <p><a href="{% url 'index' %}">Back</a></p>
 
@@ -12,3 +16,5 @@
 	<input type="text" name="guess">
 	<input type="submit" value="Submit">
 </form>
+
+{% endblock %}
