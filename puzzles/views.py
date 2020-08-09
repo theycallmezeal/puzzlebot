@@ -21,6 +21,9 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 def index(request):
+	if not request.user.is_authenticated:
+		return render(request, 'puzzles/index.html', {})
+
 	# creates a dictionary where the key is the tier's number
 	# and the value is the tier itself, plus some per-user information
 	# about that tier. necessary to store the tiers by their number
@@ -66,12 +69,10 @@ def index(request):
 			'solved': 'Solved' if (puzzle.number in solved_puzzles) else 'Unsolved'
 		})
 	
-	if request.user.is_authenticated:
-		return render(request, 'puzzles/index.html', {
-			'tier_info': tier_info.values() # don't need the key numbers any more
-		})
-	else:
-		return render(request, 'puzzles/index.html', {})
+	return render(request, 'puzzles/index.html', {
+		'tier_info': tier_info.values() # don't need the key numbers any more
+	})
+		
 
 def puzzle(request, puzzle_num):
 	"""
@@ -84,7 +85,10 @@ def puzzle(request, puzzle_num):
 			grab the html insert from the static files
 		maybe: see if a SolvedPuzzle already exists?
 	"""
-	return HttpResponse("you're viewing puzzle " + str(puzzle_num))
+	if not request.user.is_authenticated:
+		return render(request, 'puzzles/puzzle_not_logged_in.html', {})
+		
+	return render(request, 'puzzles/puzzle.html', {})
 	
 """
 def solve(request):
