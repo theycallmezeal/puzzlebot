@@ -124,9 +124,3 @@ def solve(request, puzzle_num):
 		return puzzle(request, puzzle_num, True)
 	else:
 		return puzzle(request, puzzle_num, False)
-"""
-	get puzzle num from request
-	compare correct answer (stored in db) to user's answer
-	if it's correct: (no need to worry about duplicate entries since unique_together is set in SolvedPuzzle)
-		create a solvedpuzzle entry
-"""
