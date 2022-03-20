@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 WSGI_APPLICATION = 'puzzlebot.wsgi.application'
 
