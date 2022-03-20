@@ -10,7 +10,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_urlsafe())
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+if SECRET_KEY is None:
+    SECRET_KEY = secrets.token_urlsafe()
 
 ALLOWED_HOSTS = ["cypherpuzzlebot.herokuapp.com"]
 
