@@ -1,4 +1,5 @@
 import os
+import secrets
 import dj_database_url
 from pathlib import Path
 
@@ -9,10 +10,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6^t%x^8zg%kfw$p6$=0xu_a64$57)slmswqswws*pw6yc1p7+='
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_urlsafe())
 
 ALLOWED_HOSTS = ["cypherpuzzlebot.herokuapp.com"]
 
