@@ -14,7 +14,7 @@ SECRET_KEY = '6^t%x^8zg%kfw$p6$=0xu_a64$57)slmswqswws*pw6yc1p7+='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["cypherpuzzlebot.herokuapp.com"]
 
 
 # Application definition
