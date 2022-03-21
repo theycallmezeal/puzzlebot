@@ -138,3 +138,6 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+# Restore the default primary key field from django 3.1 and earlier
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
