@@ -68,6 +68,7 @@ WSGI_APPLICATION = 'puzzlebot.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+        # Generates a database configuration from the DATABASE_URL environment variable
         'default': dj_database_url.config(
             default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
             conn_max_age=600),
@@ -137,3 +138,6 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+# Restore the default primary key field from django 3.1 and earlier
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

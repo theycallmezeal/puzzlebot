@@ -4,14 +4,14 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Tier(models.Model):
-	number = models.PositiveSmallIntegerField(unique=True)
+	number = models.PositiveSmallIntegerField(primary_key=True)
 	num_to_unlock = models.PositiveSmallIntegerField()
 	
 	def __str__(self):
 		return 'Tier ' + str(self.number) + ' (' + str(self.num_to_unlock) + ' to unlock)'
 
 class Puzzle(models.Model):
-	number = models.PositiveSmallIntegerField(unique=True)
+	number = models.PositiveSmallIntegerField(primary_key=True)
 	tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
 	answer = models.CharField(max_length=100)
 	
