@@ -1,20 +1,21 @@
 import os
+import secrets
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6^t%x^8zg%kfw$p6$=0xu_a64$57)slmswqswws*pw6yc1p7+='
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if SECRET_KEY is None:
+    SECRET_KEY = secrets.token_urlsafe()
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["cypherpuzzlebot.herokuapp.com"]
 
 
 # Application definition
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -38,6 +40,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'puzzlebot.urls'
 
@@ -57,7 +60,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 WSGI_APPLICATION = 'puzzlebot.wsgi.application'
 
@@ -66,12 +68,10 @@ WSGI_APPLICATION = 'puzzlebot.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'default': dj_database_url.config(
+            default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+            conn_max_age=600),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,8 +110,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-root')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Compression and safe caching for static files via whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Log to the console
+# By default, Django will try to log most things only to email
+# But we don't have a valid email setup
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
